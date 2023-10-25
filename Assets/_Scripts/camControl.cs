@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class camControl : MonoBehaviour
 {
-    float sensitivity = 100f;
+    [SerializeField] float sensitivity = 100f;
     public Transform playerBody;
     // Start is called before the first frame update
     void Start()
@@ -15,6 +15,8 @@ public class camControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Cursor.lockState = CursorLockMode.Locked;
+        
         float x = Input.GetAxisRaw("Mouse X");
         float y= Input.GetAxisRaw("Mouse Y");
 
