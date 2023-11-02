@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class playerMovement : MonoBehaviour
 {
+    private Rigidbody rb;
+
     #region CAMERA VARIABLES
     [SerializeField] private Camera playerCamera;
     [SerializeField] private float fov = 60f;
@@ -17,7 +19,6 @@ public class playerMovement : MonoBehaviour
     
     #region CORE MOVEMENT
     [SerializeField] private float gravity = -9.81f;
-    [SerializeField] private float jumpPower = 3f;
     [SerializeField] private bool playerCanMove = true;
     [SerializeField] private float walkSpeed = 5f;
     [SerializeField] private float maxVelocityChange = 10f;
@@ -38,6 +39,16 @@ public class playerMovement : MonoBehaviour
     
     private bool isCrouched = false;
     private Vector3 originalScale;
+
+    #endregion
+
+    #region JUMPING
+
+    [SerializeField] private bool enableJump = true;
+    [SerializeField] private KeyCode jumpKey = KeyCode.Space;
+    [SerializeField] private float jumpPower = 5f;
+
+    private bool isGrounded = false;
 
     #endregion
     
