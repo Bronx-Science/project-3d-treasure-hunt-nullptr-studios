@@ -31,6 +31,13 @@ public class TreasureSpawner : MonoBehaviour
 
     public static TreasureSpawner instance;
 
+    void Start()
+    {
+        spawnedPrefabs = new int[letters.Length];
+        instance = this;
+        SpawnTreasure();
+    }
+
     public void SpawnTreasure()
     {
         if (treasureCount >= maxTreasures)
@@ -96,11 +103,7 @@ public class TreasureSpawner : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void Start()
-    {
-        spawnedPrefabs = new int[letters.Length];
-        instance = this;
-    }
+
 
     // Update is called once per frame
     void Update()
