@@ -5,7 +5,6 @@ using TMPro;
 
 public class Words : MonoBehaviour
 {
-    
     public string word = "";
     public TMPro.TextMeshProUGUI wordText;
 
@@ -16,7 +15,6 @@ public class Words : MonoBehaviour
 
     public string displayString = "Getting Word...";
 
-
     // Start is called before the first frame update
     void Start()
     {
@@ -26,27 +24,30 @@ public class Words : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-         updateDisplay();
+        updateDisplay();
         wordText.text = displayString;
-       
     }
 
-    public void getWord(){
+    public void getWord()
+    {
         word = wordbank.instance.word;
         Debug.Log(word);
         init();
     }
 
-    public void init(){
+    public void init()
+    {
         wordLength = word.Length;
         revealedLetters = new char[26];
         displayString = "";
-        for(int i = 0; i < wordLength; i++){
+        for (int i = 0; i < wordLength; i++)
+        {
             displayString += "_ ";
         }
     }
 
-    public void updateDisplay(){
+    public void updateDisplay()
+    {
         displayString = "";
         for (int i = 0; i < wordLength; i++)
         {
@@ -61,31 +62,27 @@ public class Words : MonoBehaviour
             }
             displayString += toAdd + " ";
         }
-
-        
     }
 
-    public void revealLetter(char letter){
+    public void revealLetter(char letter)
+    {
         revealedLetters[lettersRevealed] = letter;
         lettersRevealed++;
         updateDisplay();
     }
 
-    public void guessWord(string guess){
+    public void guessWord(string guess)
+    {
         if (guess == word)
         {
             Debug.Log("You Win!");
             displayString = "Getting Word...";
             wordbank.instance.getWordFromApi();
-
+            TreasureSpawner.instance.clear();
         }
         else
         {
             Debug.Log("You Lose!");
         }
     }
-
-
-
-
 }

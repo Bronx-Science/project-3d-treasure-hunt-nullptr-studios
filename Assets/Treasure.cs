@@ -12,14 +12,12 @@ public class Treasure : MonoBehaviour
     private Words wordManager;
 
     // Start is called before the first frame update
-    void Start()
-    {
-        letter = "a"[0];
-    }
+
 
     void Awake()
     {
         beacon.SetActive(false);
+        wordManager = GameObject.Find("word").GetComponent<Words>();
     }
 
     // Update is called once per frame

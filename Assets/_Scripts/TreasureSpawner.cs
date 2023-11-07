@@ -4,16 +4,32 @@ using UnityEngine;
 
 public class TreasureSpawner : MonoBehaviour
 {
-    [SerializeField] GameObject[] treasurePrefabs = new GameObject[3];
-    [SerializeField] GameObject[] spawnedTreasures = new GameObject[3];
-    
+    [SerializeField]
+    GameObject treasurePrefab;
+
+    [SerializeField]
+    GameObject[] spawnedTreasures = new GameObject[26];
+
     int[] spawnedPrefabs;
-    [SerializeField] int maxTreasures = 5;
-    [SerializeField] int treasureCount = 0;
-    [SerializeField] float spawnDelay = 15f;
+
+    [SerializeField]
+    int maxTreasures = 26;
+
+    [SerializeField]
+    int treasureCount = 0;
+
+    [SerializeField]
+    float spawnDelay = 15f;
+
     // public for testing purposes
     public float spawnTimer = 0f;
-    [SerializeField] float bounds = 1000f;
+
+    [SerializeField]
+    float bounds = 1000f;
+
+    char[] letters = "abcdefghijklmnopqrstuvwxyz".ToCharArray();
+
+    public static TreasureSpawner instance;
 
     public void SpawnTreasure()
     {
@@ -25,8 +41,13 @@ public class TreasureSpawner : MonoBehaviour
         float x = Random.Range(0, bounds);
         float z = Random.Range(0, bounds);
         transform.position = new Vector3(x, 100f, z);
-        // pick a random treasure prefab
-        int treasureIndex = Random.Range(0, treasurePrefabs.Length);
+        // get random letter
+        int treasureIndex = Random.Range(0, letters.Length);
+        if (letters[treasureIndex] == ' ')
+        {
+            SpawnTreasure();
+            return;
+        }
         if (spawnedPrefabs[treasureIndex] == 1)
         {
             SpawnTreasure();
@@ -37,10 +58,14 @@ public class TreasureSpawner : MonoBehaviour
         Vector3 spawnPosition;
         if (Physics.Raycast(transform.position, Vector3.down, out hit, 100f))
         {
-           spawnPosition  = hit.point;
-           GameObject treasure = Instantiate(treasurePrefabs[treasureIndex], spawnPosition, Quaternion.identity);
+            spawnPosition = hit.point;
+            GameObject treasure = Instantiate(treasurePrefab, spawnPosition, Quaternion.identity);
+
             spawnedTreasures[treasureIndex] = treasure;
             spawnedPrefabs[treasureIndex] = 1;
+            treasure.GetComponent<Treasure>().letter = letters[treasureIndex];
+            treasure.name = "Treasure " + letters[treasureIndex];
+            letters[treasureIndex] = ' ';
             treasureCount++;
         }
         else
@@ -49,21 +74,35 @@ public class TreasureSpawner : MonoBehaviour
             SpawnTreasure();
             return;
         }
-        
-        
+    }
+
+    public void clear()
+    {
+        for (int i = 0; i < spawnedTreasures.Length; i++)
+        {
+            if (spawnedTreasures[i] != null)
+            {
+                Destroy(spawnedTreasures[i]);
+            }
+        }
+        treasureCount = 0;
+        spawnedPrefabs = new int[letters.Length];
+        letters = "abcdefghijklmnopqrstuvwxyz".ToCharArray();
     }
 
     // Start is called before the first frame update
     void Start()
     {
-       spawnedPrefabs = new int[treasurePrefabs.Length]; 
+        spawnedPrefabs = new int[letters.Length];
+        instance = this;
     }
 
     // Update is called once per frame
     void Update()
     {
         spawnTimer += Time.deltaTime;
-        if (spawnTimer > spawnDelay){
+        if (spawnTimer > spawnDelay)
+        {
             spawnTimer = 0f;
             if (treasureCount < maxTreasures)
             {
