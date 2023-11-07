@@ -68,13 +68,14 @@ public class Words : MonoBehaviour
     public void revealLetter(char letter){
         revealedLetters[lettersRevealed] = letter;
         lettersRevealed++;
+        updateDisplay();
     }
 
     public void guessWord(string guess){
-        if (guess = word)
+        if (guess == word)
         {
             Debug.Log("You Win!");
-            displayString = "Getting Word..."
+            displayString = "Getting Word...";
             wordbank.instance.getWordFromApi();
 
         }
