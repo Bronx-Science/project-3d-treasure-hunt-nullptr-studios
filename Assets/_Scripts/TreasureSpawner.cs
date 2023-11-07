@@ -76,6 +76,11 @@ public class TreasureSpawner : MonoBehaviour
         }
     }
 
+    public GameObject[] getTreasures()
+    {
+        return spawnedTreasures;
+    }
+
     public void clear()
     {
         for (int i = 0; i < spawnedTreasures.Length; i++)

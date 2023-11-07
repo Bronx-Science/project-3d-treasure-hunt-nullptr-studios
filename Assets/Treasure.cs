@@ -20,6 +20,16 @@ public class Treasure : MonoBehaviour
         wordManager = GameObject.Find("word").GetComponent<Words>();
     }
 
+    public void enableBeacon()
+    {
+        beacon.SetActive(true);
+    }
+
+    public void disableBeacon()
+    {
+        beacon.SetActive(false);
+    }
+
     // Update is called once per frame
     void Update() { }
 

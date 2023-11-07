@@ -16,7 +16,8 @@ public class camControl : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // Cursor.lockState = CursorLockMode.Locked;
+        Cursor.lockState = CursorLockMode.Locked;
+        isLocked = true;
     }
 
     // Update is called once per frame
@@ -28,6 +29,7 @@ public class camControl : MonoBehaviour
         }
         if (isLocked)
         {
+            Cursor.lockState = CursorLockMode.Locked;
             camHelper.position = transform.position;
             camHelper.LookAt(playerBody.position - playerBody.right * camOffset.x);
             // set the y rotation of transform to match that of camHelper
@@ -51,6 +53,10 @@ public class camControl : MonoBehaviour
                 playerBody.position
                 - playerBody.forward * camOffset.z
                 + playerBody.up * camOffset.y;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.None;
         }
 
         // stop cam
