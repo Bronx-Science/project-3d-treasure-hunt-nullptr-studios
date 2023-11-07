@@ -6,7 +6,7 @@ public class playerMovement : MonoBehaviour
 {
     private Rigidbody rb;
 
-    #region CAMERA VARIABLES
+    #region Camera Variables
     [SerializeField] private Camera playerCamera;
     [SerializeField] private GameObject playerCameraParent;
     [SerializeField] private float fov = 60f;
@@ -28,6 +28,7 @@ public class playerMovement : MonoBehaviour
 
     private bool isWalking = false;
     private bool isSprinting = false;
+    private float moveSpeed = 0.0f;
 
     #endregion
 
@@ -39,7 +40,7 @@ public class playerMovement : MonoBehaviour
 
     #endregion
 
-    #region JUMPING
+    #region Jumping
 
     [SerializeField] private bool enableJump = true;
     [SerializeField] private KeyCode jumpKey = KeyCode.Space;
@@ -56,6 +57,7 @@ public class playerMovement : MonoBehaviour
     public void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        rb.freezeRotation = true;
 
         // Set internal variables
         playerCamera.fieldOfView = fov;
@@ -74,7 +76,8 @@ public class playerMovement : MonoBehaviour
     
     public void Update()
     {
-        if(hasLookingRights)
+        CheckGround();
+        if (hasLookingRights)
         {
             // Minecraft type beat
             yaw = transform.localEulerAngles.y + Input.GetAxis("Mouse X") * mouseSensitivity;
@@ -87,6 +90,16 @@ public class playerMovement : MonoBehaviour
             playerCameraParent.transform.localRotation = Quaternion.Euler(pitch, 0, 0);
         }
 
+        GetInput();
+        // limit movement speeds
+        Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+
+        if (flatVel.magnitude > moveSpeed)
+        {
+            Vector3 limitedVel = flatVel.normalized * moveSpeed;
+            rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
+        }
+
         // handle drag
         if (isGrounded)
             rb.drag = groundDrag;
@@ -96,7 +109,6 @@ public class playerMovement : MonoBehaviour
 
     public void FixedUpdate()
     {
-        GetInput();
 
         if (hasMovingRights)
         {
@@ -105,29 +117,16 @@ public class playerMovement : MonoBehaviour
 
             targetVelocity = transform.TransformDirection(targetVelocity);
 
-            var moveSpeed = (Input.GetKey(sprintKey) ? sprintSpeed : walkSpeed);
+            moveSpeed = (Input.GetKey(sprintKey) ? sprintSpeed : walkSpeed);
             // on ground
             if(isGrounded)
                 rb.AddForce(targetVelocity.normalized * moveSpeed * 10f, ForceMode.Force);
             // in air
             else if(!isGrounded)
                 rb.AddForce(targetVelocity.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
-
-            // limit movement speeds
-            Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-
-            if(flatVel.magnitude > moveSpeed)
-            {
-                Vector3 limitedVel = flatVel.normalized * moveSpeed;
-                rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
-            }
-        }
-        if(enableJump && Input.GetKey(jumpKey) && isGrounded)
-        {
-            Jump();
         }
 
-        CheckGround();
+        
     }
 
      private void GetInput()
@@ -135,7 +134,7 @@ public class playerMovement : MonoBehaviour
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
 
-        // when to jump
+        // check for jumsp 
         if(Input.GetKey(jumpKey) && canJump && isGrounded)
         {
             canJump = false;
