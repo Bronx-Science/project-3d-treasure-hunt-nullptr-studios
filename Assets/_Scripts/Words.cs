@@ -5,6 +5,8 @@ using TMPro;
 
 public class Words : MonoBehaviour
 {
+    [SerializeField] private AudioClip win;
+    [SerializeField] private AudioClip miss;
     public string word = "";
     public TMPro.TextMeshProUGUI wordText;
 
@@ -75,10 +77,14 @@ public class Words : MonoBehaviour
     {
         if (guess == word)
         {
+            AudioSource aus = Camera.main.GetComponent<AudioSource>();
+            aus.PlayOneShot(win);
             Debug.Log("You Win!");
             displayString = "Getting Word...";
             wordbank.instance.getWordFromApi();
             TreasureSpawner.instance.clear();
+            GameManager.instance.addScore(100);
+            lettersRevealed = 0;
         }
         else
         {

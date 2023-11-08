@@ -368,6 +368,7 @@ MonoBehaviour:
   beacon: {fileID: 6382299045373036430}
   letter: 0
   wordManager: {fileID: 0}
+  collect: {fileID: 8300000, guid: 75576a88d56e1824392c09f01f24b419, type: 3}
 --- !u!65 &6938936488045247923
 BoxCollider:
   m_ObjectHideFlags: 0

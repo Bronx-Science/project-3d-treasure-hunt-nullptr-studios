@@ -11,6 +11,8 @@ public class Treasure : MonoBehaviour
     [SerializeField]
     private Words wordManager;
 
+    [SerializeField] private AudioClip collect;
+
     // Start is called before the first frame update
 
 
@@ -37,6 +39,9 @@ public class Treasure : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
+            
+            AudioSource aus = Camera.main.GetComponent<AudioSource>();
+            aus.PlayOneShot(collect);
             wordManager.revealLetter(letter);
             Destroy(gameObject);
         }

@@ -43,6 +43,10 @@ public class Buffs : MonoBehaviour
             case 1:
                 StartCoroutine(Sonar());
                 break;
+            case 2:
+                GameManager.instance.addTime(20f);
+                audioSource.PlayOneShot(audioClips[2], volume);
+                break;
             default:
                 break;
         }
