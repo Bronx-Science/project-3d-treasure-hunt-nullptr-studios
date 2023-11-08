@@ -20,7 +20,7 @@ public class playerMovement : MonoBehaviour
 
     #region CORE MOVEMENT
     [SerializeField] private bool hasMovingRights = true;
-    [SerializeField] private float walkSpeed = 5f;
+    public float walkSpeed = 5f;
     [SerializeField] private KeyCode sprintKey = KeyCode.LeftShift;
     [SerializeField] private float sprintCooldown = .5f;
     [SerializeField] private float airMultiplier = .75f;
@@ -32,12 +32,14 @@ public class playerMovement : MonoBehaviour
 
     private int speed = 0;
 
+    public static playerMovement instance;
+
     #endregion
 
     #region SPRINTING
 
     [SerializeField] private bool hasSprintingRights = true;
-    [SerializeField] private float sprintSpeed = 11f;
+    public float sprintSpeed = 11f;
 
 
     #endregion
@@ -46,7 +48,7 @@ public class playerMovement : MonoBehaviour
 
     [SerializeField] private bool enableJump = true;
     [SerializeField] private KeyCode jumpKey = KeyCode.Space;
-    [SerializeField] private float jumpPower = 12f;
+    public float jumpPower = 12f;
     [SerializeField] private float jumpCooldown = 1;
 
     private bool isGrounded = false;
@@ -63,6 +65,7 @@ public class playerMovement : MonoBehaviour
     bool isPlaying = false;
     public void Awake()
     {
+        instance = this;
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
         walkSE = GetComponent<AudioSource>();
