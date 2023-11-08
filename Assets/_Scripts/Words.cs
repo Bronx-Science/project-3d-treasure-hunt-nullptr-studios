@@ -94,11 +94,12 @@ public class Words : MonoBehaviour
         {
             AudioSource aus = Camera.main.GetComponent<AudioSource>();
             aus.PlayOneShot(win);
+            GameManager.instance.addScore(100 * wordLength );
             Debug.Log("You Win!");
             displayString = "Getting Word...";
             wordbank.instance.getWordFromApi();
             TreasureSpawner.instance.clear();
-            GameManager.instance.addScore(100);
+            
             lettersRevealed = 0;
         }
         else
