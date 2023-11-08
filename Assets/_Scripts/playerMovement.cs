@@ -85,6 +85,7 @@ public class playerMovement : MonoBehaviour
     AudioSource walkSE;
 
     bool isPlaying = false;
+    bool canDoubleJump = true;
 
     public void Awake()
     {
@@ -191,6 +192,11 @@ public class playerMovement : MonoBehaviour
 
             Invoke(nameof(ResetJump), jumpCooldown);
         }
+        else if (Input.GetKeyDown(jumpKey) && canDoubleJump)
+        {
+            Jump();
+            canDoubleJump = false;
+        }
     }
 
     // Sets isGrounded based on a raycast sent straigth down from the player object
@@ -208,6 +214,7 @@ public class playerMovement : MonoBehaviour
         {
             Debug.DrawRay(origin, direction * distance, Color.red);
             isGrounded = true;
+            canDoubleJump = true;
         }
         else
         {
