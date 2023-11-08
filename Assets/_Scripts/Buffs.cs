@@ -52,6 +52,13 @@ public class Buffs : MonoBehaviour
                 GameManager.instance.addTime(20f);
                 audioSource.PlayOneShot(audioClips[2], volume);
                 break;
+            case 3:
+                StartCoroutine(Alacrity());
+                break;
+            case 4:
+                StartCoroutine(Leaping());
+                break;
+
             default:
                 break;
         }
@@ -88,6 +95,35 @@ public class Buffs : MonoBehaviour
         }
     }
 
+    IEnumerator Alacrity()
+    {
+        float basespeed = playerMovement.instance.walkSpeed;
+        float baseSprint = playerMovement.instance.sprintSpeed;
+
+        playerMovement.instance.walkSpeed = basespeed * 2;
+        playerMovement.instance.sprintSpeed = baseSprint * 2;
+
+        audioSource.PlayOneShot(audioClips[3], volume);
+
+        yield return new WaitForSeconds(10);
+
+        playerMovement.instance.walkSpeed = 10f;
+        playerMovement.instance.sprintSpeed = 15f;
+    }
+
+    IEnumerator Leaping()
+    {
+        float basejump = playerMovement.instance.jumpPower;
+
+        playerMovement.instance.jumpPower = basejump * 2;
+
+        audioSource.PlayOneShot(audioClips[4], volume);
+
+        yield return new WaitForSeconds(10);
+
+        playerMovement.instance.jumpPower = basejump;
+    }
+
     public string getBuffName()
     {
         switch (currentBuff)
@@ -96,6 +132,11 @@ public class Buffs : MonoBehaviour
                 return "Sonar";
             case 2:
                 return "Add Time";
+            case 3:
+                return "Alacrity";
+            case 4:
+                return "Leaping";
+
             default:
                 return "None";
         }
