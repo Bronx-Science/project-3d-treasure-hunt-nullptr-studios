@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class playerMovement : MonoBehaviour
 {
-    private Rigidbody rb;
+    public Rigidbody rb;
 
     #region Camera Variables
     [SerializeField] private Camera playerCamera;
@@ -51,17 +51,17 @@ public class playerMovement : MonoBehaviour
     public float jumpPower = 12f;
     [SerializeField] private float jumpCooldown = 1;
 
-    private bool isGrounded = false;
-    private bool isJumping = false;
+    public bool isGrounded = false;
+    public bool isJumping = false;
     private bool isFalling = false;
     bool canJump = true;
 
     #endregion
 
-    float horizontalInput;
-    float verticalInput;
+    public float horizontalInput;
+    public float verticalInput;
     AudioSource walkSE;
-    Animator animator;
+    [SerializeField] private Animator animator;
     bool isPlaying = false;
     public void Awake()
     {
@@ -87,10 +87,13 @@ public class playerMovement : MonoBehaviour
 
     public void Update()
     {
+        
+        
+        CheckGround();
+        GetInput();
         if (Input.GetKeyDown(KeyCode.Z)){
             hasLookingRights = !hasLookingRights;
         }
-        CheckGround();
         if (hasLookingRights)
         {
             Cursor.lockState = CursorLockMode.Locked;
@@ -107,7 +110,6 @@ public class playerMovement : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
         }
 
-        GetInput();
         // limit movement speeds
         Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
@@ -145,6 +147,9 @@ public class playerMovement : MonoBehaviour
                 isFalling = false;
 
                 rb.AddForce(targetVelocity.normalized * moveSpeed * 10f, ForceMode.Force);
+               Debug.Log(moveSpeed);
+                animator.SetFloat("PlayerSpeed", moveSpeed);
+                animator.SetFloat("Speed", moveSpeed);
                 if (targetVelocity != Vector3.zero && isPlaying == false)
                 {
                     isPlaying = true;
@@ -197,19 +202,23 @@ public class playerMovement : MonoBehaviour
     // Sets isGrounded based on a raycast sent straigth down from the player object
     private void CheckGround()
     {
-        Vector3 origin = new Vector3(transform.position.x, transform.position.y - (transform.localScale.y * .5f), transform.position.z);
+        Vector3 origin = new Vector3(transform.position.x, transform.position.y - (transform.localScale.y * .2f), transform.position.z);
         Vector3 direction = transform.TransformDirection(Vector3.down);
         float distance = .75f;
-
-        if (Physics.Raycast(origin, direction, out RaycastHit hit, distance))
+        RaycastHit hit;
+        if (Physics.Raycast(origin, direction, out hit, distance))
         {
+
             Debug.DrawRay(origin, direction * distance, Color.red);
             isGrounded = true;
         }
         else
         {
             isGrounded = false;
+        
         }
+        // Debug.Log(hit.collider);
+        // Debug.DrawRay(origin, direction * distance, Color.red);
     }
 
     private void Jump()

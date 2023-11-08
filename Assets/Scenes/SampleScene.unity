@@ -1805,7 +1805,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   treasurePrefab: {fileID: 5125783073086644935, guid: 5792bf59731746b4893ebd6aee2113b1, type: 3}
-  maxTreasures: 3
+  maxTreasures: 30
   treasureCount: 0
   spawnDelay: 25
   spawnTimer: 0
@@ -2364,7 +2364,7 @@ MonoBehaviour:
   - {fileID: 0}
   maxTreasures: 26
   treasureCount: 0
-  spawnDelay: 15
+  spawnDelay: 5
   spawnTimer: 0
   bounds: 1000
 --- !u!4 &1731881445
@@ -2630,7 +2630,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400134, guid: 39d03f82786b57d41af8bd27bce84402, type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400134, guid: 39d03f82786b57d41af8bd27bce84402, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400134, guid: 39d03f82786b57d41af8bd27bce84402, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400134, guid: 39d03f82786b57d41af8bd27bce84402, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 400134, guid: 39d03f82786b57d41af8bd27bce84402, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2638,7 +2650,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400134, guid: 39d03f82786b57d41af8bd27bce84402, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.337
       objectReference: {fileID: 0}
     - target: {fileID: 400134, guid: 39d03f82786b57d41af8bd27bce84402, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2672,6 +2684,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9500000, guid: 39d03f82786b57d41af8bd27bce84402, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: a7250967b5f03a6409b5fdc4a517c51d, type: 2}
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 39d03f82786b57d41af8bd27bce84402, type: 3}
@@ -2692,11 +2708,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1982339678}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4dfbec6f330d49b4b970dbd218c98ef0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rb: {fileID: 1982339681}
   playerCamera: {fileID: 963194227}
   playerCameraParent: {fileID: 727425715}
   fov: 60
@@ -2715,6 +2732,45 @@ MonoBehaviour:
   jumpKey: 32
   jumpPower: 12
   jumpCooldown: 1
+  isGrounded: 0
+  isJumping: 0
+  horizontalInput: 0
+  verticalInput: 0
+  animator: {fileID: 0}
+--- !u!95 &1982339680 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 9500000, guid: 39d03f82786b57d41af8bd27bce84402, type: 3}
+  m_PrefabInstance: {fileID: 1982339676}
+  m_PrefabAsset: {fileID: 0}
+--- !u!54 &1982339681
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1982339678}
+  serializedVersion: 2
+  m_Mass: 0.0000001
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &1982339683
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1982339678}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e932971954571cf4dbf5f7cfa50b8ba4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerCollider: {fileID: 2135935171}
 --- !u!1 &2047441173
 GameObject:
   m_ObjectHideFlags: 0
@@ -3031,6 +3087,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4dfbec6f330d49b4b970dbd218c98ef0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rb: {fileID: 0}
   playerCamera: {fileID: 963194227}
   playerCameraParent: {fileID: 727425715}
   fov: 60
@@ -3049,6 +3106,11 @@ MonoBehaviour:
   jumpKey: 32
   jumpPower: 12
   jumpCooldown: 1
+  isGrounded: 0
+  isJumping: 0
+  horizontalInput: 0
+  verticalInput: 0
+  animator: {fileID: 1982339680}
 --- !u!82 &2135935173
 AudioSource:
   m_ObjectHideFlags: 0
@@ -3173,8 +3235,8 @@ Transform:
   m_LocalScale: {x: 4, y: 4, z: 4}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1982339677}
   - {fileID: 727425716}
+  - {fileID: 1982339677}
   m_Father: {fileID: 0}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
