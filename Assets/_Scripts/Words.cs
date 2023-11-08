@@ -23,6 +23,7 @@ public class Words : MonoBehaviour
     [SerializeField]
     private TMPro.TextMeshProUGUI revealText;
     public string displayString = "Getting Word...";
+    string revealLetterString = "";
 
     // Start is called before the first frame update
     void Start()
@@ -35,6 +36,7 @@ public class Words : MonoBehaviour
     {
         updateDisplay();
         wordText.text = displayString;
+        revealText.text = revealLetterString;
     }
 
     public void getWord()
@@ -71,19 +73,18 @@ public class Words : MonoBehaviour
             }
             displayString += toAdd + " ";
         }
+        revealLetterString = "";
+        for (int i = 0; i < lettersRevealed; i++)
+        {
+            revealLetterString += revealedLetters[i] + " ";
+        }
+        
     }
 
     public void revealLetter(char letter)
     {
         revealedLetters[lettersRevealed] = letter;
         lettersRevealed++;
-        string revealLetterString = "";
-        for (int i = 0; i < lettersRevealed; i++)
-        {
-            revealLetterString += revealedLetters[i] + " ";
-        }
-        revealText.text = revealLetterString;
-
         updateDisplay();
     }
 

@@ -87,9 +87,13 @@ public class playerMovement : MonoBehaviour
 
     public void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Z)){
+            hasLookingRights = !hasLookingRights;
+        }
         CheckGround();
         if (hasLookingRights)
         {
+            Cursor.lockState = CursorLockMode.Locked;
             // Minecraft type beat
             yaw = transform.localEulerAngles.y + Input.GetAxis("Mouse X") * mouseSensitivity;
 
@@ -99,6 +103,8 @@ public class playerMovement : MonoBehaviour
             pitch = Mathf.Clamp(pitch, -maxLookAngle, maxLookAngle);
             transform.localEulerAngles = new Vector3(0, yaw, 0);
             playerCameraParent.transform.localRotation = Quaternion.Euler(pitch, 0, 0);
+        } else {
+            Cursor.lockState = CursorLockMode.None;
         }
 
         GetInput();
