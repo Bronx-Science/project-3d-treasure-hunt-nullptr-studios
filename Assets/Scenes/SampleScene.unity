@@ -697,7 +697,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   win: {fileID: 8300000, guid: 56c0b566eafa9a542be6f3f11195983d, type: 3}
-  miss: {fileID: 0}
+  miss: {fileID: 8300000, guid: 365c7fd14d5d813488751c1ebac50e1c, type: 3}
   word: 
   wordText: {fileID: 841326296}
   revealedLetters: 
@@ -1824,7 +1824,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 24300002, guid: c41913912d2221e42974514b9719f4d0, type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.2
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -2757,7 +2757,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 24300002, guid: c41913912d2221e42974514b9719f4d0, type: 2}
   m_audioClip: {fileID: 8300000, guid: 823563c9fd5981a458defc3168c2c6ae, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.2
   m_Pitch: 1
   Loop: 1
   Mute: 0

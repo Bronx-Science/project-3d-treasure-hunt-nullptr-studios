@@ -4,13 +4,21 @@ using UnityEngine;
 
 public class instruction : MonoBehaviour
 {
-    [SerializeField] private GameObject panel;
+    [SerializeField]
+    private GameObject panel;
 
+    [SerializeField]
+    private AudioClip clip;
 
-    public void togglePanel(){
-        if (panel.activeSelf){
+    public void togglePanel()
+    {
+        Camera.main.GetComponent<AudioSource>().PlayOneShot(clip);
+        if (panel.activeSelf)
+        {
             panel.SetActive(false);
-        } else {
+        }
+        else
+        {
             panel.SetActive(true);
         }
     }

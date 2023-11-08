@@ -5,8 +5,11 @@ using TMPro;
 
 public class Words : MonoBehaviour
 {
-    [SerializeField] private AudioClip win;
-    [SerializeField] private AudioClip miss;
+    [SerializeField]
+    private AudioClip win;
+
+    [SerializeField]
+    private AudioClip miss;
     public string word = "";
     public TMPro.TextMeshProUGUI wordText;
 
@@ -88,6 +91,12 @@ public class Words : MonoBehaviour
         }
         else
         {
+            AudioSource aus = Camera.main.GetComponent<AudioSource>();
+            aus.PlayOneShot(miss);
+            displayString = "Getting Word...";
+            wordbank.instance.getWordFromApi();
+            TreasureSpawner.instance.clear();
+            lettersRevealed = 0;
             Debug.Log("You Lose!");
         }
     }

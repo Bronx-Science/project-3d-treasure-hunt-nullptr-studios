@@ -3,15 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
+
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     public float timeRemaining = 300f;
 
-    [SerializeField] private TextMeshProUGUI scoreText;
-    [SerializeField] private TextMeshProUGUI timeText;
+    [SerializeField]
+    private TextMeshProUGUI scoreText;
+
+    [SerializeField]
+    private TextMeshProUGUI timeText;
 
     public float score = 0f;
+    public static float lastScore = 0f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -23,9 +29,9 @@ public class GameManager : MonoBehaviour
     {
         timeRemaining -= Time.deltaTime;
 
-
         if (timeRemaining <= 0)
         {
+            lastScore = score;
             SceneManager.LoadScene("GameOver");
         }
 
