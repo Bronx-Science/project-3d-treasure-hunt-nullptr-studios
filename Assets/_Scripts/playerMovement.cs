@@ -6,76 +6,52 @@ public class playerMovement : MonoBehaviour
 {
     private Rigidbody rb;
 
-    public static playerMovement instance;
-
     #region Camera Variables
-    [SerializeField]
-    private Camera playerCamera;
-
-    [SerializeField]
-    private GameObject playerCameraParent;
-
-    [SerializeField]
-    private float fov = 60f;
-
-    [SerializeField]
-    private bool hasLookingRights = true;
-
-    [SerializeField]
-    private float mouseSensitivity = 2f;
-
-    [SerializeField]
-    private float maxLookAngle = 50f;
+    [SerializeField] private Camera playerCamera;
+    [SerializeField] private GameObject playerCameraParent;
+    [SerializeField] private float fov = 60f;
+    [SerializeField] private bool hasLookingRights = true;
+    [SerializeField] private float mouseSensitivity = 2f;
+    [SerializeField] private float maxLookAngle = 50f;
     float cameraRotation;
     private float yaw = 0.0f;
     private float pitch = 0.0f;
     #endregion
 
     #region CORE MOVEMENT
-    [SerializeField]
-    private bool hasMovingRights = true;
-    public float walkSpeed = 5f;
-
-    [SerializeField]
-    private KeyCode sprintKey = KeyCode.LeftShift;
-
-    [SerializeField]
-    private float sprintCooldown = .5f;
-
-    [SerializeField]
-    private float airMultiplier = .75f;
-
-    [SerializeField]
-    private float groundDrag;
+    [SerializeField] private bool hasMovingRights = true;
+    [SerializeField] private float walkSpeed = 5f;
+    [SerializeField] private KeyCode sprintKey = KeyCode.LeftShift;
+    [SerializeField] private float sprintCooldown = .5f;
+    [SerializeField] private float airMultiplier = .75f;
+    [SerializeField] private float groundDrag;
 
     private bool isWalking = false;
     private bool isSprinting = false;
     private float moveSpeed = 0.0f;
 
+    private int speed = 0;
+
     #endregion
 
     #region SPRINTING
 
-    [SerializeField]
-    private bool hasSprintingRights = true;
-    public float sprintSpeed = 11f;
+    [SerializeField] private bool hasSprintingRights = true;
+    [SerializeField] private float sprintSpeed = 11f;
+
 
     #endregion
 
     #region Jumping
 
-    [SerializeField]
-    private bool enableJump = true;
-
-    [SerializeField]
-    private KeyCode jumpKey = KeyCode.Space;
-
-    public float jumpPower = 12f;
-
-    [SerializeField]
-    private float jumpCooldown = 1;
+    [SerializeField] private bool enableJump = true;
+    [SerializeField] private KeyCode jumpKey = KeyCode.Space;
+    [SerializeField] private float jumpPower = 12f;
+    [SerializeField] private float jumpCooldown = 1;
 
     private bool isGrounded = false;
+    private bool isJumping = false;
+    private bool isFalling = false;
     bool canJump = true;
 
     #endregion
@@ -83,10 +59,8 @@ public class playerMovement : MonoBehaviour
     float horizontalInput;
     float verticalInput;
     AudioSource walkSE;
-
+    Animator animator;
     bool isPlaying = false;
-    bool canDoubleJump = true;
-
     public void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -95,17 +69,18 @@ public class playerMovement : MonoBehaviour
 
         // Set internal variables
         playerCamera.fieldOfView = fov;
+
     }
 
     public void Start()
     {
-        instance = this;
         Cursor.lockState = CursorLockMode.Locked;
 
         // TODO: Add crosshair later
         // Set internal variables
         playerCamera.fieldOfView = fov;
     }
+
 
     public void Update()
     {
@@ -142,6 +117,7 @@ public class playerMovement : MonoBehaviour
 
     public void FixedUpdate()
     {
+
         if (hasMovingRights)
         {
             // Calculate how fast we should be moving
@@ -153,6 +129,12 @@ public class playerMovement : MonoBehaviour
             // on ground
             if (isGrounded)
             {
+                animator.SetBool("isGrounded", true);
+                animator.SetBool("isJumping", false);
+                isJumping = false;
+                animator.SetBool("isFalling", false);
+                isFalling = false;
+
                 rb.AddForce(targetVelocity.normalized * moveSpeed * 10f, ForceMode.Force);
                 if (targetVelocity != Vector3.zero && isPlaying == false)
                 {
@@ -164,18 +146,27 @@ public class playerMovement : MonoBehaviour
                     isPlaying = false;
                     walkSE.Stop();
                 }
+
             }
+
             // in air
             else if (!isGrounded)
             {
-                rb.AddForce(
-                    targetVelocity.normalized * moveSpeed * 10f * airMultiplier,
-                    ForceMode.Force
-                );
+                animator.SetBool("isGrounded", false);
+                if (rb.velocity.y < -0.1)
+                {
+                    animator.SetBool("isFalling", true);
+                    isFalling = false;
+                }
+
+                rb.AddForce(targetVelocity.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
                 isPlaying = false;
                 walkSE.Stop();
             }
+
         }
+
+
     }
 
     private void GetInput()
@@ -183,7 +174,7 @@ public class playerMovement : MonoBehaviour
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
 
-        // check for jumsp
+        // check for jumsp 
         if (Input.GetKey(jumpKey) && canJump && isGrounded)
         {
             canJump = false;
@@ -192,21 +183,12 @@ public class playerMovement : MonoBehaviour
 
             Invoke(nameof(ResetJump), jumpCooldown);
         }
-        else if (Input.GetKeyDown(jumpKey) && canDoubleJump)
-        {
-            Jump();
-            canDoubleJump = false;
-        }
     }
 
     // Sets isGrounded based on a raycast sent straigth down from the player object
     private void CheckGround()
     {
-        Vector3 origin = new Vector3(
-            transform.position.x,
-            transform.position.y - (transform.localScale.y * .5f),
-            transform.position.z
-        );
+        Vector3 origin = new Vector3(transform.position.x, transform.position.y - (transform.localScale.y * .5f), transform.position.z);
         Vector3 direction = transform.TransformDirection(Vector3.down);
         float distance = .75f;
 
@@ -214,7 +196,6 @@ public class playerMovement : MonoBehaviour
         {
             Debug.DrawRay(origin, direction * distance, Color.red);
             isGrounded = true;
-            canDoubleJump = true;
         }
         else
         {
@@ -228,10 +209,12 @@ public class playerMovement : MonoBehaviour
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
         rb.AddForce(transform.up * jumpPower, ForceMode.Impulse);
+        animator.SetBool("isJumping", true);
+        isJumping = true;
     }
-
     private void ResetJump()
     {
         canJump = true;
     }
+
 }
