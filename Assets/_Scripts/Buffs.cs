@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Buffs : MonoBehaviour
 {
@@ -11,6 +12,9 @@ public class Buffs : MonoBehaviour
 
     [SerializeField]
     private AudioClip[] audioClips;
+
+    [SerializeField]
+    private TextMeshProUGUI buffText;
 
     // buffs by id
     // 0 - none
@@ -33,6 +37,7 @@ public class Buffs : MonoBehaviour
         {
             useBuff();
         }
+        buffText.text = "Current Buff: " + getBuffName();
     }
 
     public void useBuff()
@@ -80,6 +85,19 @@ public class Buffs : MonoBehaviour
                 continue;
             }
             treasure.GetComponent<Treasure>().disableBeacon();
+        }
+    }
+
+    public string getBuffName()
+    {
+        switch (currentBuff)
+        {
+            case 1:
+                return "Sonar";
+            case 2:
+                return "Add Time";
+            default:
+                return "None";
         }
     }
 }
