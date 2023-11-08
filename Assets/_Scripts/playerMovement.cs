@@ -17,7 +17,7 @@ public class playerMovement : MonoBehaviour
     private float yaw = 0.0f;
     private float pitch = 0.0f;
     #endregion
-    
+
     #region CORE MOVEMENT
     [SerializeField] private bool hasMovingRights = true;
     [SerializeField] private float walkSpeed = 5f;
@@ -51,19 +51,23 @@ public class playerMovement : MonoBehaviour
     bool canJump = true;
 
     #endregion
-    
+
     float horizontalInput;
     float verticalInput;
+    AudioSource walkSE;
+
+    bool isPlaying = false;
     public void Awake()
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
+        walkSE = GetComponent<AudioSource>();
 
         // Set internal variables
         playerCamera.fieldOfView = fov;
 
     }
-    
+
     public void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -73,7 +77,7 @@ public class playerMovement : MonoBehaviour
         playerCamera.fieldOfView = fov;
     }
 
-    
+
     public void Update()
     {
         CheckGround();
@@ -119,23 +123,42 @@ public class playerMovement : MonoBehaviour
 
             moveSpeed = (Input.GetKey(sprintKey) ? sprintSpeed : walkSpeed);
             // on ground
-            if(isGrounded)
+            if (isGrounded)
+            {
                 rb.AddForce(targetVelocity.normalized * moveSpeed * 10f, ForceMode.Force);
+                if (targetVelocity != Vector3.zero && isPlaying == false)
+                {
+                    isPlaying = true;
+                    walkSE.Play();
+                }
+                else if (targetVelocity == Vector3.zero)
+                {
+                    isPlaying = false;
+                    walkSE.Stop();
+                }
+
+            }
+
             // in air
-            else if(!isGrounded)
+            else if (!isGrounded)
+            {
                 rb.AddForce(targetVelocity.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
+                isPlaying = false;
+                walkSE.Stop();
+            }
+
         }
 
-        
+
     }
 
-     private void GetInput()
+    private void GetInput()
     {
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
 
         // check for jumsp 
-        if(Input.GetKey(jumpKey) && canJump && isGrounded)
+        if (Input.GetKey(jumpKey) && canJump && isGrounded)
         {
             canJump = false;
 
@@ -145,7 +168,7 @@ public class playerMovement : MonoBehaviour
         }
     }
 
-// Sets isGrounded based on a raycast sent straigth down from the player object
+    // Sets isGrounded based on a raycast sent straigth down from the player object
     private void CheckGround()
     {
         Vector3 origin = new Vector3(transform.position.x, transform.position.y - (transform.localScale.y * .5f), transform.position.z);
@@ -163,7 +186,7 @@ public class playerMovement : MonoBehaviour
         }
     }
 
-   private void Jump()
+    private void Jump()
     {
         // reset y velocity
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
