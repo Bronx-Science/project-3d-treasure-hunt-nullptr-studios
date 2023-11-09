@@ -52,6 +52,18 @@ public class playerMovement : MonoBehaviour
 
     #endregion
 
+    #region Animations
+
+    [SerializeField] private GameObject Player;
+
+    private Animator playerAnim;
+    private bool isFalling = false;
+    private bool isJumping = false;
+    private bool isMoving = false;
+    private float currentSpeed = 0f;
+
+    #endregion
+
     float horizontalInput;
     float verticalInput;
     AudioSource walkSE;
@@ -62,6 +74,7 @@ public class playerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
         walkSE = GetComponent<AudioSource>();
+        playerAnim = Player.GetComponent<Animator>();
 
         // Set internal variables
         playerCamera.fieldOfView = fov;
@@ -113,7 +126,6 @@ public class playerMovement : MonoBehaviour
 
     public void FixedUpdate()
     {
-
         if (hasMovingRights)
         {
             // Calculate how fast we should be moving
@@ -123,6 +135,11 @@ public class playerMovement : MonoBehaviour
 
             moveSpeed = (Input.GetKey(sprintKey) ? sprintSpeed : walkSpeed);
             // on ground
+            currentSpeed = Mathf.Sqrt(Mathf.Pow(horizontalInput * moveSpeed, 2) + Mathf.Pow(verticalInput * moveSpeed, 2));
+            isMoving = (currentSpeed > 0);
+            playerAnim.SetBool("isMoving", isMoving);
+            playerAnim.SetFloat("Speed", currentSpeed);
+            Debug.Log(playerAnim.GetFloat("Speed"));
             if (isGrounded)
             {
                 rb.AddForce(targetVelocity.normalized * moveSpeed * 10f, ForceMode.Force);
@@ -145,6 +162,8 @@ public class playerMovement : MonoBehaviour
                 rb.AddForce(targetVelocity.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
                 isPlaying = false;
                 walkSE.Stop();
+                //isFalling = true;
+                //playerAnim.SetBool("isFalling", isFalling);
             }
 
         }
@@ -183,6 +202,8 @@ public class playerMovement : MonoBehaviour
         else
         {
             isGrounded = false;
+            isFalling = true;
+            playerAnim.SetBool("isFalling", isFalling);
         }
     }
 
@@ -190,8 +211,9 @@ public class playerMovement : MonoBehaviour
     {
         // reset y velocity
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-
         rb.AddForce(transform.up * jumpPower, ForceMode.Impulse);
+        isJumping = true;
+        playerAnim.SetBool("isJumping", isJumping);
     }
     private void ResetJump()
     {
