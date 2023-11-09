@@ -52,14 +52,24 @@ public class playerMovement : MonoBehaviour
     [SerializeField] private float jumpCooldown = 1;
 
     public bool isGrounded = false;
-    public bool isJumping = false;
-    private bool isFalling = false;
     bool canJump = true;
 
     #endregion
 
-    public float horizontalInput;
-    public float verticalInput;
+    #region Animations
+
+    [SerializeField] private GameObject Player;
+
+    private Animator playerAnim;
+    private bool isFalling = false;
+    private bool isJumping = false;
+    private bool isMoving = false;
+    private float currentSpeed = 0f;
+
+    #endregion
+
+    private float horizontalInput;
+    private float verticalInput;
     AudioSource walkSE;
     [SerializeField] private Animator animator;
     bool isPlaying = false;
@@ -69,6 +79,7 @@ public class playerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
         walkSE = GetComponent<AudioSource>();
+        playerAnim = Player.GetComponent<Animator>();
 
         // Set internal variables
         playerCamera.fieldOfView = fov;
@@ -87,11 +98,12 @@ public class playerMovement : MonoBehaviour
 
     public void Update()
     {
-        
-        
+
+
         CheckGround();
         GetInput();
-        if (Input.GetKeyDown(KeyCode.Z)){
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
             hasLookingRights = !hasLookingRights;
         }
         if (hasLookingRights)
@@ -106,7 +118,9 @@ public class playerMovement : MonoBehaviour
             pitch = Mathf.Clamp(pitch, -maxLookAngle, maxLookAngle);
             transform.localEulerAngles = new Vector3(0, yaw, 0);
             playerCameraParent.transform.localRotation = Quaternion.Euler(pitch, 0, 0);
-        } else {
+        }
+        else
+        {
             Cursor.lockState = CursorLockMode.None;
         }
 
@@ -128,7 +142,6 @@ public class playerMovement : MonoBehaviour
 
     public void FixedUpdate()
     {
-
         if (hasMovingRights)
         {
             // Calculate how fast we should be moving
@@ -137,6 +150,13 @@ public class playerMovement : MonoBehaviour
             targetVelocity = transform.TransformDirection(targetVelocity);
 
             moveSpeed = (Input.GetKey(sprintKey) ? sprintSpeed : walkSpeed);
+            
+            currentSpeed = Mathf.Sqrt(Mathf.Pow(horizontalInput * moveSpeed, 2) + Mathf.Pow(verticalInput * moveSpeed, 2));
+            isMoving = (currentSpeed > 0);
+            playerAnim.SetBool("isMoving", isMoving);
+            playerAnim.SetFloat("Speed", currentSpeed);
+
+            //Debug.Log(playerAnim.GetFloat("Speed"));
             // on ground
             if (isGrounded)
             {
@@ -147,9 +167,6 @@ public class playerMovement : MonoBehaviour
                 isFalling = false;
 
                 rb.AddForce(targetVelocity.normalized * moveSpeed * 10f, ForceMode.Force);
-               Debug.Log(moveSpeed);
-                animator.SetFloat("PlayerSpeed", moveSpeed);
-                animator.SetFloat("Speed", moveSpeed);
                 if (targetVelocity != Vector3.zero && isPlaying == false)
                 {
                     isPlaying = true;
@@ -176,6 +193,8 @@ public class playerMovement : MonoBehaviour
                 rb.AddForce(targetVelocity.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
                 isPlaying = false;
                 walkSE.Stop();
+                //isFalling = true;
+                //playerAnim.SetBool("isFalling", isFalling);
             }
 
         }
@@ -215,7 +234,8 @@ public class playerMovement : MonoBehaviour
         else
         {
             isGrounded = false;
-        
+            isFalling = true;
+            playerAnim.SetBool("isFalling", isFalling);
         }
         // Debug.Log(hit.collider);
         // Debug.DrawRay(origin, direction * distance, Color.red);
@@ -225,7 +245,6 @@ public class playerMovement : MonoBehaviour
     {
         // reset y velocity
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-
         rb.AddForce(transform.up * jumpPower, ForceMode.Impulse);
         animator.SetBool("isJumping", true);
         isJumping = true;
