@@ -187,7 +187,7 @@ public class playerMovement : MonoBehaviour
                 if (rb.velocity.y < -0.1)
                 {
                     animator.SetBool("isFalling", true);
-                    isFalling = false;
+                    isFalling = true;
                 }
 
                 rb.AddForce(targetVelocity.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
@@ -230,6 +230,8 @@ public class playerMovement : MonoBehaviour
 
             Debug.DrawRay(origin, direction * distance, Color.red);
             isGrounded = true;
+            isFalling = false;
+            playerAnim.SetBool("isFalling", isFalling);
         }
         else
         {
