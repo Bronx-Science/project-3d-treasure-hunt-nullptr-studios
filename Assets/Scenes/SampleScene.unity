@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.5585312, g: 0.80992115, b: 0.990975, a: 1}
+  m_IndirectSpecularColor: {r: 0.5590147, g: 0.8095578, b: 0.99108803, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -613,6 +613,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_SendPointerHoverToParent: 1
   m_HorizontalAxis: Horizontal
   m_VerticalAxis: Vertical
   m_SubmitButton: Submit
@@ -843,7 +844,7 @@ Transform:
   m_Children:
   - {fileID: 963194228}
   m_Father: {fileID: 2135935175}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &841326294
 GameObject:
@@ -1057,7 +1058,6 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
-  m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -1773,7 +1773,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c525251a61b7c34dbd96dd7a76ddf3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  treasurePrefab: {fileID: 5125783073086644935, guid: 5792bf59731746b4893ebd6aee2113b1, type: 3}
+  buffPrefab: {fileID: 5125783073086644935, guid: 5792bf59731746b4893ebd6aee2113b1, type: 3}
+  particlePrefab: {fileID: 3527046013209178111, guid: f0aa6e9302f88db468d70391860cd543, type: 3}
   maxTreasures: 30
   treasureCount: 0
   spawnDelay: 15
@@ -2304,6 +2305,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   treasurePrefab: {fileID: 7712376241124189958, guid: 7aad3673b7533894296c5abf4d758353, type: 3}
+  particlePrefab: {fileID: 3527046013209178111, guid: 623e8165aa4e03e40b613ed2685c0a4e, type: 3}
   spawnedTreasures:
   - {fileID: 0}
   - {fileID: 0}
@@ -2609,7 +2611,6 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 2
     m_TransformParent: {fileID: 2135935175}
     m_Modifications:
     - target: {fileID: 100134, guid: 39d03f82786b57d41af8bd27bce84402, type: 3}
@@ -2681,7 +2682,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 9100000, guid: a7250967b5f03a6409b5fdc4a517c51d, type: 2}
     m_RemovedComponents: []
-    m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 39d03f82786b57d41af8bd27bce84402, type: 3}
 --- !u!4 &1982339677 stripped
 Transform:
@@ -3172,8 +3172,8 @@ Transform:
   m_LocalScale: {x: 4, y: 4, z: 4}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1982339677}
   - {fileID: 727425716}
+  - {fileID: 1982339677}
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

@@ -4,7 +4,10 @@ using UnityEngine;
 public class BuffSpawner : MonoBehaviour
 {
     [SerializeField]
-    GameObject treasurePrefab;
+    GameObject buffPrefab;
+
+    [SerializeField]
+    GameObject particlePrefab;
 
     [SerializeField]
     ArrayList spawnedTreasures = new ArrayList();
@@ -41,8 +44,12 @@ public class BuffSpawner : MonoBehaviour
         if (Physics.Raycast(transform.position, Vector3.down, out hit, 100f))
         {
             spawnPosition = hit.point;
-            GameObject treasure = Instantiate(treasurePrefab, spawnPosition, Quaternion.identity);
-            spawnedTreasures.Add(treasure);
+            GameObject buff = Instantiate(buffPrefab, spawnPosition, Quaternion.identity);
+            GameObject buffParticle = Instantiate(particlePrefab, spawnPosition, Quaternion.Euler(new Vector3(-90,0,0)));
+            buffParticle.transform.SetParent(buff.transform);
+
+            buff.name = "Buff";
+            spawnedTreasures.Add(buff);
             treasureCount++;
         }
         else

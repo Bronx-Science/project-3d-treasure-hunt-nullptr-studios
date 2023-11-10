@@ -150,13 +150,16 @@ public class playerMovement : MonoBehaviour
             targetVelocity = transform.TransformDirection(targetVelocity);
 
             moveSpeed = (Input.GetKey(sprintKey) ? sprintSpeed : walkSpeed);
-            
-            currentSpeed = Mathf.Sqrt(Mathf.Pow(horizontalInput * moveSpeed, 2) + Mathf.Pow(verticalInput * moveSpeed, 2));
-            isMoving = (currentSpeed > 0);
-            playerAnim.SetBool("isMoving", isMoving);
-            playerAnim.SetFloat("Speed", currentSpeed);
 
-            //Debug.Log(playerAnim.GetFloat("Speed"));
+            currentSpeed = Mathf.Sqrt(Mathf.Pow(horizontalInput * moveSpeed, 2) + Mathf.Pow(verticalInput * moveSpeed, 2));
+            if (currentSpeed == 0)
+                playerAnim.SetFloat("Speed", 0);
+            else if (currentSpeed != 0 && currentSpeed < 15)
+                playerAnim.SetFloat("Speed", 10);
+            else if (currentSpeed != 0 && currentSpeed >= 15)
+                playerAnim.SetFloat("Speed", 15);
+
+            Debug.Log(playerAnim.GetFloat("Speed"));
             // on ground
             if (isGrounded)
             {
