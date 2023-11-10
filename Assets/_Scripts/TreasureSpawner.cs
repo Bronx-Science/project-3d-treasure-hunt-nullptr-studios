@@ -8,6 +8,9 @@ public class TreasureSpawner : MonoBehaviour
     GameObject treasurePrefab;
 
     [SerializeField]
+    GameObject particlePrefab;
+
+    [SerializeField]
     GameObject[] spawnedTreasures = new GameObject[26];
 
     int[] spawnedPrefabs;
@@ -67,6 +70,8 @@ public class TreasureSpawner : MonoBehaviour
         {
             spawnPosition = hit.point;
             GameObject treasure = Instantiate(treasurePrefab, spawnPosition, Quaternion.identity);
+            GameObject treasureParticle = Instantiate(particlePrefab, spawnPosition, Quaternion.Euler(new Vector3(-90, 0, 0)));
+            treasureParticle.transform.SetParent(treasure.transform);
 
             spawnedTreasures[treasureIndex] = treasure;
             spawnedPrefabs[treasureIndex] = 1;
