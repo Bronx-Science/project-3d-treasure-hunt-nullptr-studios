@@ -7,24 +7,42 @@ public class playerMovement : MonoBehaviour
     public Rigidbody rb;
 
     #region Camera Variables
-    [SerializeField] private Camera playerCamera;
-    [SerializeField] private GameObject playerCameraParent;
-    [SerializeField] private float fov = 60f;
-    [SerializeField] private bool hasLookingRights = true;
-    [SerializeField] private float mouseSensitivity = 2f;
-    [SerializeField] private float maxLookAngle = 50f;
+    [SerializeField]
+    private Camera playerCamera;
+
+    [SerializeField]
+    private GameObject playerCameraParent;
+
+    [SerializeField]
+    private float fov = 60f;
+    public bool hasLookingRights = true;
+
+    [SerializeField]
+    private float mouseSensitivity = 2f;
+
+    [SerializeField]
+    private float maxLookAngle = 50f;
     float cameraRotation;
     private float yaw = 0.0f;
     private float pitch = 0.0f;
     #endregion
 
     #region CORE MOVEMENT
-    [SerializeField] private bool hasMovingRights = true;
+    [SerializeField]
+    private bool hasMovingRights = true;
     public float walkSpeed = 5f;
-    [SerializeField] private KeyCode sprintKey = KeyCode.LeftShift;
-    [SerializeField] private float sprintCooldown = .5f;
-    [SerializeField] private float airMultiplier = .75f;
-    [SerializeField] private float groundDrag;
+
+    [SerializeField]
+    private KeyCode sprintKey = KeyCode.LeftShift;
+
+    [SerializeField]
+    private float sprintCooldown = .5f;
+
+    [SerializeField]
+    private float airMultiplier = .75f;
+
+    [SerializeField]
+    private float groundDrag;
 
     private bool isWalking = false;
     private bool isSprinting = false;
@@ -38,18 +56,23 @@ public class playerMovement : MonoBehaviour
 
     #region SPRINTING
 
-    [SerializeField] private bool hasSprintingRights = true;
+    [SerializeField]
+    private bool hasSprintingRights = true;
     public float sprintSpeed = 11f;
-
 
     #endregion
 
     #region Jumping
 
-    [SerializeField] private bool enableJump = true;
-    [SerializeField] private KeyCode jumpKey = KeyCode.Space;
+    [SerializeField]
+    private bool enableJump = true;
+
+    [SerializeField]
+    private KeyCode jumpKey = KeyCode.Space;
     public float jumpPower = 12f;
-    [SerializeField] private float jumpCooldown = 1;
+
+    [SerializeField]
+    private float jumpCooldown = 1;
 
     public bool isGrounded = false;
     bool canJump = true;
@@ -58,7 +81,8 @@ public class playerMovement : MonoBehaviour
 
     #region Animations
 
-    [SerializeField] private GameObject Player;
+    [SerializeField]
+    private GameObject Player;
 
     private Animator playerAnim;
     private bool isFalling = false;
@@ -71,8 +95,11 @@ public class playerMovement : MonoBehaviour
     private float horizontalInput;
     private float verticalInput;
     AudioSource walkSE;
-    [SerializeField] private Animator animator;
+
+    [SerializeField]
+    private Animator animator;
     bool isPlaying = false;
+
     public void Awake()
     {
         instance = this;
@@ -83,7 +110,6 @@ public class playerMovement : MonoBehaviour
 
         // Set internal variables
         playerCamera.fieldOfView = fov;
-
     }
 
     public void Start()
@@ -95,11 +121,8 @@ public class playerMovement : MonoBehaviour
         playerCamera.fieldOfView = fov;
     }
 
-
     public void Update()
     {
-
-
         CheckGround();
         GetInput();
         if (Input.GetKeyDown(KeyCode.Z))
@@ -151,7 +174,9 @@ public class playerMovement : MonoBehaviour
 
             moveSpeed = (Input.GetKey(sprintKey) ? sprintSpeed : walkSpeed);
 
-            currentSpeed = Mathf.Sqrt(Mathf.Pow(horizontalInput * moveSpeed, 2) + Mathf.Pow(verticalInput * moveSpeed, 2));
+            currentSpeed = Mathf.Sqrt(
+                Mathf.Pow(horizontalInput * moveSpeed, 2) + Mathf.Pow(verticalInput * moveSpeed, 2)
+            );
             if (currentSpeed == 0)
                 playerAnim.SetFloat("Speed", 0);
             else if (currentSpeed != 0 && currentSpeed < 15)
@@ -180,9 +205,7 @@ public class playerMovement : MonoBehaviour
                     isPlaying = false;
                     walkSE.Stop();
                 }
-
             }
-
             // in air
             else if (!isGrounded)
             {
@@ -193,16 +216,16 @@ public class playerMovement : MonoBehaviour
                     isFalling = true;
                 }
 
-                rb.AddForce(targetVelocity.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
+                rb.AddForce(
+                    targetVelocity.normalized * moveSpeed * 10f * airMultiplier,
+                    ForceMode.Force
+                );
                 isPlaying = false;
                 walkSE.Stop();
                 //isFalling = true;
                 //playerAnim.SetBool("isFalling", isFalling);
             }
-
         }
-
-
     }
 
     private void GetInput()
@@ -210,7 +233,7 @@ public class playerMovement : MonoBehaviour
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
 
-        // check for jumsp 
+        // check for jumsp
         if (Input.GetKey(jumpKey) && canJump && isGrounded)
         {
             canJump = false;
@@ -224,13 +247,16 @@ public class playerMovement : MonoBehaviour
     // Sets isGrounded based on a raycast sent straigth down from the player object
     private void CheckGround()
     {
-        Vector3 origin = new Vector3(transform.position.x, transform.position.y - (transform.localScale.y * .2f), transform.position.z);
+        Vector3 origin = new Vector3(
+            transform.position.x,
+            transform.position.y - (transform.localScale.y * .2f),
+            transform.position.z
+        );
         Vector3 direction = transform.TransformDirection(Vector3.down);
         float distance = .75f;
         RaycastHit hit;
         if (Physics.Raycast(origin, direction, out hit, distance))
         {
-
             Debug.DrawRay(origin, direction * distance, Color.red);
             isGrounded = true;
             isFalling = false;
@@ -254,9 +280,9 @@ public class playerMovement : MonoBehaviour
         animator.SetBool("isJumping", true);
         isJumping = true;
     }
+
     private void ResetJump()
     {
         canJump = true;
     }
-
 }
