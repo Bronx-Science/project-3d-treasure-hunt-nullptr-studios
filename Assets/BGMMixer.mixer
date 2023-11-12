@@ -6,7 +6,7 @@ AudioMixerController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: NewAudioMixer
+  m_Name: BGMMixer
   m_OutputGroup: {fileID: 0}
   m_MasterGroup: {fileID: 24300002}
   m_Snapshots:
@@ -15,7 +15,9 @@ AudioMixerController:
   m_SuspendThreshold: -80
   m_EnableSuspend: 1
   m_UpdateMode: 0
-  m_ExposedParameters: []
+  m_ExposedParameters:
+  - guid: 314e88bd76e200049ad5fdac98556345
+    name: Volume
   m_AudioMixerGroupViews:
   - guids:
     - 353f4b6b7ba87a94c82e6bc3274c21cb
@@ -64,5 +66,6 @@ AudioMixerSnapshotController:
   m_Name: Snapshot
   m_AudioMixer: {fileID: 24100000}
   m_SnapshotID: 19be77af66292f940ad642b5e0a816ff
-  m_FloatValues: {}
+  m_FloatValues:
+    314e88bd76e200049ad5fdac98556345: 0
   m_TransitionOverrides: {}
