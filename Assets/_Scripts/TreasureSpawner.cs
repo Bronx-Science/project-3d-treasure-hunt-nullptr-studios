@@ -70,7 +70,11 @@ public class TreasureSpawner : MonoBehaviour
         {
             spawnPosition = hit.point;
             GameObject treasure = Instantiate(treasurePrefab, spawnPosition, Quaternion.identity);
-            GameObject treasureParticle = Instantiate(particlePrefab, spawnPosition, Quaternion.Euler(new Vector3(-90, 0, 0)));
+            GameObject treasureParticle = Instantiate(
+                particlePrefab,
+                spawnPosition,
+                Quaternion.Euler(new Vector3(-90, 0, 0))
+            );
             treasureParticle.transform.SetParent(treasure.transform);
 
             spawnedTreasures[treasureIndex] = treasure;
@@ -82,7 +86,7 @@ public class TreasureSpawner : MonoBehaviour
         }
         else
         {
-            Debug.LogError("No ground found");
+            Debug.LogError("No ground found @ " + transform.position);
             SpawnTreasure();
             return;
         }

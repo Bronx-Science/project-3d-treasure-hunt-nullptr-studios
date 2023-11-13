@@ -45,7 +45,11 @@ public class BuffSpawner : MonoBehaviour
         {
             spawnPosition = hit.point;
             GameObject buff = Instantiate(buffPrefab, spawnPosition, Quaternion.identity);
-            GameObject buffParticle = Instantiate(particlePrefab, spawnPosition, Quaternion.Euler(new Vector3(-90,0,0)));
+            GameObject buffParticle = Instantiate(
+                particlePrefab,
+                spawnPosition,
+                Quaternion.Euler(new Vector3(-90, 0, 0))
+            );
             buffParticle.transform.SetParent(buff.transform);
 
             buff.name = "Buff";
@@ -54,14 +58,15 @@ public class BuffSpawner : MonoBehaviour
         }
         else
         {
-            Debug.LogError("No ground found");
+            Debug.LogError("No ground found @ " + transform.position);
             SpawnTreasure();
             return;
         }
     }
 
     // Start is called before the first frame update
-    void Start() { 
+    void Start()
+    {
         SpawnTreasure();
     }
 

@@ -179,12 +179,12 @@ public class playerMovement : MonoBehaviour
             );
             if (currentSpeed == 0)
                 playerAnim.SetFloat("Speed", 0);
-            else if (currentSpeed != 0 && currentSpeed < 15)
+            else if (currentSpeed != 0 && currentSpeed < 6)
                 playerAnim.SetFloat("Speed", 10);
-            else if (currentSpeed != 0 && currentSpeed >= 15)
+            else if (currentSpeed != 0 && currentSpeed >= 6)
                 playerAnim.SetFloat("Speed", 15);
 
-            Debug.Log(playerAnim.GetFloat("Speed"));
+            // Debug.Log(playerAnim.GetFloat("Speed"));
             // on ground
             if (isGrounded)
             {

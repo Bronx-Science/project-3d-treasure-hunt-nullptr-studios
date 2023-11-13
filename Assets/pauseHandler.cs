@@ -17,8 +17,13 @@ public class pauseHandler : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            isPaused = !isPaused;
+            pauseandunpause();
         }
+    }
+
+    public void pauseandunpause()
+    {
+        isPaused = !isPaused;
         if (isPaused)
         {
             Time.timeScale = 0;
