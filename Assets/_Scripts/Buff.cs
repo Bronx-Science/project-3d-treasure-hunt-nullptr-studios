@@ -11,7 +11,7 @@ public class Buff : MonoBehaviour
 
     void OnCollisionEnter(Collision other)
     {
-        Debug.Log("Collision");
+        
         if (other.gameObject.tag == "Player")
         {
             AudioSource aus = Camera.main.GetComponent<AudioSource>();
